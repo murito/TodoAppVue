@@ -113,11 +113,13 @@
 
                                                     <v-list-item-content @dblclick="edit(item.id)">
                                                         <v-text-field
-                                                            :value="item.text"
                                                             outlined
                                                             v-if="editing == item.id"
                                                             hide-details
-                                                            @keypress.enter="updateText($event, item.id)"
+                                                            append-icon="mdi-check"
+                                                            v-model="currentUpdate"
+                                                            @click:append="updateText(item)"
+                                                            @keypress.enter="updateText(item)"
                                                         ></v-text-field>
                                                         <div v-if="editing!=item.id">
                                                             <v-list-item-title

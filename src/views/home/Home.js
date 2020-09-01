@@ -8,6 +8,7 @@ export default {
         newTask: null,
         editing: null,
         currentFilter: 'all',
+        currentUpdate: '',
         chart: {
             data: {
                 labels: ['Completed', 'Pending'],
@@ -85,16 +86,18 @@ export default {
         edit(id) {
             let task = this.todoList.find(t => t.id == id);
             if (task && task.state == 0) {
+                this.currentUpdate = task.text;
                 this.editing = id;
             }
         },
 
-        updateText(event, id) {
-            let task = this.todoList.find(t => t.id == id);
+        updateText(item) {
+            let task = this.todoList.find(t => t.id == item.id);
             if( task ){
-                this.updateTask({ id: id, update: {...task, text: event.target.value } });
+                this.updateTask({ id: item.id, update: {...task, text: this.currentUpdate } });
             }
             this.editing = null;
+            this.currentUpdate = '';
         },
 
         closeEditing() {
