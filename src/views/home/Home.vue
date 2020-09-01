@@ -39,7 +39,7 @@
                                     </v-col>
                                     <v-col cols="12" md="6">
                                         <div class="chart">
-                                            <bar-chart :chart-data="chartData" :options="chartOptions" :style="myStyles"/>
+                                            <bar-chart :chart-data="chart.data" :options="chart.options" :style="chart.styles"/>
                                         </div>
                                     </v-col>
                                 </v-row>

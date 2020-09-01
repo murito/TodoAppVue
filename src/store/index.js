@@ -35,11 +35,17 @@ export default new Vuex.Store({
         },
 
         removeTask(state, payload){
-            state.todoList.splice(payload.id, 1);
+            let index = state.todoList.findIndex(t => t.id == payload.id);
+            if( index != -1 ){
+                state.todoList.splice(index, 1);
+            }
         },
 
         updateTask(state, payload){
-            Vue.set(state.todoList, payload.id, payload.update);
+            let index = state.todoList.findIndex(t => t.id == payload.id);
+            if( index != -1 ){
+                Vue.set(state.todoList, index, payload.update);
+            }
         },
 
         setTasks(state, payload){

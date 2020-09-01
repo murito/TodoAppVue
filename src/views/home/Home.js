@@ -5,38 +5,39 @@ export default {
     name: 'home',
 
     data: () => ({
-        todos: [],
         newTask: null,
         editing: null,
         currentFilter: 'all',
-        chartData: {
-            labels: ['Completed', 'Pending'],
-            datasets: [
-                {
-                    label: 'TodoList',
-                    backgroundColor: ['#4CAF50', '#1c76d2'],
-                    data: [0, 0]
-                }
-            ]
-        },
-        chartOptions: {
-            responsive: true,
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
+        chart: {
+            data: {
+                labels: ['Completed', 'Pending'],
+                datasets: [
+                    {
+                        label: 'TodoList',
+                        backgroundColor: ['#4CAF50', '#1c76d2'],
+                        data: [0, 0]
                     }
-                }]
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            },
+            styles: {
+                height: '200px',
+                width: '100%',
+                position: 'relative',
             }
-        },
-        myStyles: {
-            height: '200px',
-            width: '100%',
-            position: 'relative',
         },
     }),
 
@@ -66,7 +67,7 @@ export default {
 
         addNewTask() {
             this.addTask({
-                id: this.todoList.length,
+                id: Math.random().toString(36).substr(2, 9),
                 text: this.newTask,
                 state: 0
             });
@@ -75,17 +76,24 @@ export default {
         },
 
         toogleState(id) {
-            this.updateTask({ id: id, update: { ...this.todoList[id], state: this.todoList[id].state == 0 ? 1 : 0 } });
+            let task = this.todoList.find(t => t.id == id);
+            if ( task ){
+                this.updateTask({ id: id, update: { ...task, state: task.state == 0 ? 1 : 0 } });
+            }
         },
 
         edit(id) {
-            if (this.todoList[id].state == 0) {
+            let task = this.todoList.find(t => t.id == id);
+            if (task && task.state == 0) {
                 this.editing = id;
             }
         },
 
         updateText(event, id) {
-            this.updateTask({ id: id, update: { ...this.todoList[id], text: event.target.value } });
+            let task = this.todoList.find(t => t.id == id);
+            if( task ){
+                this.updateTask({ id: id, update: {...task, text: event.target.value } });
+            }
             this.editing = null;
         },
 
@@ -107,14 +115,10 @@ export default {
 
         completedTasks() {
             return this.todoList.filter(t => t.state == 1).length;
-        }
-    },
+        },
 
-    components: { barChart },
-
-    watch: {
-        todoList() {
-            this.chartData = {
+        reloadChart(){
+            this.chart.data = {
                 labels: ['Completed', 'Pending'],
                 datasets: [
                     {
@@ -126,16 +130,15 @@ export default {
         }
     },
 
+    components: { barChart },
+
+    watch: {
+        todoList() {
+            this.reloadChart();
+        }
+    },
+
     mounted() {
-        this.chartData = {
-            labels: ['Completed', 'Pending'],
-            datasets: [
-                {
-                    label: 'Todo List',
-                    backgroundColor: ['#4CAF50', '#1c76d2'],
-                    data: [this.completedTasks(), this.pendingTasks()]
-                }
-            ]
-        };
+        this.reloadChart();
     }
 }
