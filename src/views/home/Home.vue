@@ -106,8 +106,8 @@
                                                             :input-value="active"
                                                             :true-value="1"
                                                             :false-value="0"
-                                                            @click="todoList[item.id].state = todoList[item.id].state == 0 ? 1 : 0 "
-                                                            v-model="todoList[item.id].state"
+                                                            @click="item.state = item.state == 0 ? 1 : 0 "
+                                                            v-model="item.state"
                                                         ></v-checkbox>
                                                     </v-list-item-action>
 
